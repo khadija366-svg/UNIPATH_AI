@@ -1,0 +1,84 @@
+:root {
+  /* Backgrounds */
+  --bg: #E7E9E0;
+  --surface: #FFFFFF;
+  --surface-soft: #F5F6F1;
+  --surface-tint: rgba(255, 255, 255, 0.65);
+
+  /* Text */
+  --text-primary: #20251B;
+  --text-secondary: #74786D;
+  --text-tertiary: #9BA08F;
+  --text-on-dark: #FFFFFF;
+
+  /* Primary green family */
+  --accent: #8FAE70;
+  --accent-light: #A7C77B;
+  --accent-soft: #BBD795;
+  --accent-dark: #6F8D54;
+  --accent-deep: #3A4D27;
+
+  /* Hero gradient */
+  --hero-gradient: linear-gradient(135deg, #9EBC7D 0%, #6F8D54 45%, #4A6234 100%);
+  --hero-glow: radial-gradient(circle at 20% 30%, rgba(187, 215, 149, 0.45) 0%, transparent 45%);
+
+  /* Soft accent purple/lavender */
+  --purple: #C4A8D4;
+  --purple-soft: #DCC8E8;
+  --purple-dark: #9E7FB3;
+
+  /* Semantic */
+  --success: #7DA865;
+  --warning: #D4A855;
+  --danger: #C76B6B;
+  --info: #6B9EC7;
+
+  /* Status colors */
+  --status-eligible: #7DA865;
+  --status-borderline: #D4A855;
+  --status-ineligible: #C76B6B;
+  --status-open: #7DA865;
+  --status-closing: #D4A855;
+  --status-closed: #C76B6B;
+
+  /* Borders */
+  --border: rgba(143, 174, 112, 0.18);
+  --border-strong: rgba(143, 174, 112, 0.35);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(32, 37, 27, 0.05);
+  --shadow: 0 8px 30px rgba(32, 37, 27, 0.08);
+  --shadow-lg: 0 16px 48px rgba(32, 37, 27, 0.12);
+  --shadow-inset: inset 0 1px 2px rgba(255, 255, 255, 0.35);
+
+  /* Border radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --text-xs: 0.72rem;
+  --text-sm: 0.82rem;
+  --text-base: 0.94rem;
+  --text-md: 1.05rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.55rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.6rem;
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}

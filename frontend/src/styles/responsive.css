@@ -1,0 +1,37 @@
+@media (max-width: 900px) {
+  .page {
+    padding: var(--space-md);
+  }
+
+  .dashboard-grid {
+    gap: var(--space-md);
+  }
+
+  .dashboard-grid > * {
+    grid-column: span 12 !important;
+  }
+
+  .page-title {
+    font-size: var(--text-xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .card,
+  .card-hero {
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .page {
+    padding: var(--space-sm);
+  }
+}

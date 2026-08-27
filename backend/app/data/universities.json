@@ -1,0 +1,450 @@
+{
+  "universities": [
+    {
+      "university_id": "comsats_lahore",
+      "name": "COMSATS University Islamabad",
+      "campus": "Lahore",
+      "city": "Lahore",
+      "admission_cycle": "2026",
+      "source": {
+        "url": "https://www.cuilahore.edu.pk/admissions",
+        "type": "official",
+        "verified_at": "2026-08-20",
+        "academic_session": "2026",
+        "confidence": "HIGH"
+      },
+      "programs": [
+        {
+          "program_id": "comsats_lahore_bscs",
+          "university_id": "comsats_lahore",
+          "university_name": "COMSATS University Islamabad",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Computer Science",
+          "normalized_name": "computer_science",
+          "eligibility": {
+            "minimum_matric": 50,
+            "minimum_intermediate": 50,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "NTS"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
+          },
+          "fees": {
+            "amount": 220000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-15",
+          "deadline_status": "OPEN"
+        },
+        {
+          "program_id": "comsats_lahore_bsse",
+          "university_id": "comsats_lahore",
+          "university_name": "COMSATS University Islamabad",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Software Engineering",
+          "normalized_name": "software_engineering",
+          "eligibility": {
+            "minimum_matric": 50,
+            "minimum_intermediate": 50,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "NTS"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
+          },
+          "fees": {
+            "amount": 225000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-15",
+          "deadline_status": "OPEN"
+        },
+        {
+          "program_id": "comsats_lahore_bba",
+          "university_id": "comsats_lahore",
+          "university_name": "COMSATS University Islamabad",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BBA",
+          "normalized_name": "business_administration",
+          "eligibility": {
+            "minimum_matric": 45,
+            "minimum_intermediate": 45,
+            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "required_subjects": []
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "NTS"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
+          },
+          "fees": {
+            "amount": 200000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-15",
+          "deadline_status": "OPEN"
+        }
+      ]
+    },
+    {
+      "university_id": "fast_lahore",
+      "name": "FAST National University",
+      "campus": "Lahore",
+      "city": "Lahore",
+      "admission_cycle": "2026",
+      "source": {
+        "url": "https://www.nu.edu.pk/admissions",
+        "type": "official",
+        "verified_at": "2026-08-22",
+        "academic_session": "2026",
+        "confidence": "HIGH"
+      },
+      "programs": [
+        {
+          "program_id": "fast_lahore_bscs",
+          "university_id": "fast_lahore",
+          "university_name": "FAST National University",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Computer Science",
+          "normalized_name": "computer_science",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "FAST-NU Test"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
+          },
+          "fees": {
+            "amount": 280000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-08-30",
+          "deadline_status": "CLOSING_SOON"
+        },
+        {
+          "program_id": "fast_lahore_bsee",
+          "university_id": "fast_lahore",
+          "university_name": "FAST National University",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Electrical Engineering",
+          "normalized_name": "electrical_engineering",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
+            "required_subjects": ["Mathematics", "Physics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "FAST-NU Test"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
+          },
+          "fees": {
+            "amount": 285000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-08-30",
+          "deadline_status": "CLOSING_SOON"
+        }
+      ]
+    },
+    {
+      "university_id": "uet_lahore",
+      "name": "University of Engineering and Technology",
+      "campus": "Lahore",
+      "city": "Lahore",
+      "admission_cycle": "2026",
+      "source": {
+        "url": "https://www.uet.edu.pk/admissions",
+        "type": "official",
+        "verified_at": "2026-08-18",
+        "academic_session": "2026",
+        "confidence": "HIGH"
+      },
+      "programs": [
+        {
+          "program_id": "uet_lahore_bscs",
+          "university_id": "uet_lahore",
+          "university_name": "University of Engineering and Technology",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Computer Science",
+          "normalized_name": "computer_science",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["ECAT"],
+            "minimum_score": null
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.25,
+              "intermediate": 0.45,
+              "entry_test": 0.3
+            }
+          },
+          "fees": {
+            "amount": 120000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-05",
+          "deadline_status": "OPEN"
+        },
+        {
+          "program_id": "uet_lahore_bsee",
+          "university_id": "uet_lahore",
+          "university_name": "University of Engineering and Technology",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Electrical Engineering",
+          "normalized_name": "electrical_engineering",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
+            "required_subjects": ["Mathematics", "Physics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["ECAT"],
+            "minimum_score": null
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.25,
+              "intermediate": 0.45,
+              "entry_test": 0.3
+            }
+          },
+          "fees": {
+            "amount": 125000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-05",
+          "deadline_status": "OPEN"
+        }
+      ]
+    },
+    {
+      "university_id": "pu_lahore",
+      "name": "University of the Punjab",
+      "campus": "Lahore",
+      "city": "Lahore",
+      "admission_cycle": "2026",
+      "source": {
+        "url": "https://pu.edu.pk/admissions",
+        "type": "official",
+        "verified_at": "2026-08-15",
+        "academic_session": "2026",
+        "confidence": "MEDIUM"
+      },
+      "programs": [
+        {
+          "program_id": "pu_lahore_bscs",
+          "university_id": "pu_lahore",
+          "university_name": "University of the Punjab",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Computer Science",
+          "normalized_name": "computer_science",
+          "eligibility": {
+            "minimum_matric": 45,
+            "minimum_intermediate": 45,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "PU Test"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.5,
+              "entry_test": 0.4
+            }
+          },
+          "fees": {
+            "amount": 95000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-20",
+          "deadline_status": "OPEN"
+        },
+        {
+          "program_id": "pu_lahore_bba",
+          "university_id": "pu_lahore",
+          "university_name": "University of the Punjab",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BBA",
+          "normalized_name": "business_administration",
+          "eligibility": {
+            "minimum_matric": 45,
+            "minimum_intermediate": 45,
+            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "required_subjects": []
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["NAT", "PU Test"],
+            "minimum_score": 50
+          },
+          "merit_formula": {
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.5,
+              "entry_test": 0.4
+            }
+          },
+          "fees": {
+            "amount": 85000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-09-20",
+          "deadline_status": "OPEN"
+        }
+      ]
+    },
+    {
+      "university_id": "lums",
+      "name": "Lahore University of Management Sciences",
+      "campus": "Lahore",
+      "city": "Lahore",
+      "admission_cycle": "2026",
+      "source": {
+        "url": "https://lums.edu.pk/admissions",
+        "type": "official",
+        "verified_at": "2026-08-10",
+        "academic_session": "2026",
+        "confidence": "HIGH"
+      },
+      "programs": [
+        {
+          "program_id": "lums_bscs",
+          "university_id": "lums",
+          "university_name": "Lahore University of Management Sciences",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BS Computer Science",
+          "normalized_name": "computer_science",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["SAT", "LUMS Test"],
+            "minimum_score": null
+          },
+          "merit_formula": {
+            "components": {}
+          },
+          "fees": {
+            "amount": 650000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-08-28",
+          "deadline_status": "CLOSING_SOON"
+        },
+        {
+          "program_id": "lums_bba",
+          "university_id": "lums",
+          "university_name": "Lahore University of Management Sciences",
+          "campus": "Lahore",
+          "city": "Lahore",
+          "name": "BBA",
+          "normalized_name": "business_administration",
+          "eligibility": {
+            "minimum_matric": 60,
+            "minimum_intermediate": 60,
+            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "required_subjects": []
+          },
+          "tests": {
+            "required": true,
+            "accepted_tests": ["SAT", "LUMS Test"],
+            "minimum_score": null
+          },
+          "merit_formula": {
+            "components": {}
+          },
+          "fees": {
+            "amount": 700000,
+            "period": "semester",
+            "currency": "PKR"
+          },
+          "deadline": "2026-08-28",
+          "deadline_status": "CLOSING_SOON"
+        }
+      ]
+    }
+  ]
+}
