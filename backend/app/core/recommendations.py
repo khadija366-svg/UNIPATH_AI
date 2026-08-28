@@ -103,6 +103,9 @@ def generate_recommendations(profile: Dict[str, Any]) -> List[Dict[str, Any]]:
     with ThreadPoolExecutor(max_workers=8) as executor:
         evaluations = list(executor.map(lambda p: evaluate_program(profile, p), programs))
 
+    # Filter out unrelated programs (NO_MATCH) before ranking
+    evaluations = [ev for ev in evaluations if ev["program_match"] != "NO_MATCH"]
+
     recommendations = []
     for ev in evaluations:
         score = calculate_match_score(ev)

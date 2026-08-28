@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
@@ -9,6 +10,8 @@ from app.schemas.counselor import CounselorRequest, CounselorResponse
 from app.core.recommendations import generate_recommendations
 from app.services.university_service import get_all_programs
 from app.config import GROQ_API_KEY, GROQ_MODEL
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -198,7 +201,8 @@ def _get_recommendations(request: CounselorRequest) -> List[Dict[str, Any]]:
     if not recommendations and request.profile and request.profile.get("preferred_program"):
         try:
             recommendations = generate_recommendations(request.profile)
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to generate recommendations in counselor: %s", e)
             recommendations = []
     return recommendations
 
@@ -206,28 +210,44 @@ def _get_recommendations(request: CounselorRequest) -> List[Dict[str, Any]]:
 def _build_context(request: CounselorRequest, entities: Dict[str, Any]) -> str:
     program = entities.get("program")
     recommendations = _get_recommendations(request)
+    profile = request.profile or {}
+    has_profile = bool(profile.get("name") or profile.get("preferred_program"))
 
     sections = []
+
+    # Always include profile summary when profile data exists
+    if has_profile:
+        profile_lines = [
+            "STUDENT PROFILE:",
+            f"Name: {profile.get('name', '—')}",
+            f"Preferred program: {profile.get('preferred_program', '—')}",
+            f"Matric: {profile.get('matric_percentage', '—')}%",
+            f"Intermediate: {profile.get('intermediate_percentage', '—')}%",
+            f"Qualification: {profile.get('qualification', '—')}",
+            f"Budget: PKR {profile.get('budget', 0):,}",
+            f"Location: {profile.get('location', '—')}",
+        ]
+        tests = profile.get("tests", [])
+        if tests:
+            test_strs = [f"{t.get('name','')}: {t.get('score','')}/{t.get('total','')}" for t in tests]
+            profile_lines.append(f"Entry tests: {', '.join(test_strs)}")
+        else:
+            profile_lines.append("Entry tests: none reported")
+        sections.append("\n".join(profile_lines))
+
     if program:
         sections.append("VERIFIED PROGRAM DATA:\n" + _format_program_data(program))
         result = _find_student_result(program, recommendations)
         if result:
             sections.append("STUDENT-SPECIFIC RESULT:\n" + _format_student_result(result))
     elif recommendations:
-        sections.append("STUDENT PROFILE SUMMARY:")
-        profile = request.profile or {}
-        sections.append(
-            f"Preferred program: {profile.get('preferred_program', '—')}, "
-            f"Matric: {profile.get('matric_percentage', '—')}%, "
-            f"Intermediate: {profile.get('intermediate_percentage', '—')}%, "
-            f"Budget: PKR {profile.get('budget', 0):,}"
-        )
         sections.append("TOP RECOMMENDATIONS:")
         for rec in recommendations[:3]:
             sections.append(
                 f"- {rec.get('program')} at {rec.get('university')} "
                 f"(Match: {rec.get('match_score', '—')}%, "
                 f"Eligibility: {rec.get('eligibility', {}).get('status', '—')}, "
+                f"Merit: {rec.get('merit', '—')}, "
                 f"Test: {rec.get('test_status', '—')})"
             )
     else:
@@ -267,6 +287,8 @@ def _fallback_answer(request: CounselorRequest, entities: Dict[str, Any]) -> str
     program = entities.get("program")
     recommendations = _get_recommendations(request)
     intent = _detect_intent(request.message)
+    profile = request.profile or {}
+    has_profile = bool(profile.get("name") or profile.get("preferred_program"))
 
     if program:
         result = _find_student_result(program, recommendations)
@@ -310,6 +332,8 @@ def _fallback_answer(request: CounselorRequest, entities: Dict[str, Any]) -> str
             if result:
                 status = result.get("eligibility", {}).get("status", "Unknown")
                 return f"Based on your profile, your eligibility status for {program['name']} at {program['university_name']} is: {status}."
+            if has_profile:
+                return f"Your profile shows: Matric {profile.get('matric_percentage', '—')}%, Intermediate {profile.get('intermediate_percentage', '—')}%, Qualification: {profile.get('qualification', '—')}. Eligibility requirements: {_format_program_data(program).split(chr(10))[2]}."
             return f"Eligibility requirements: {_format_program_data(program).split(chr(10))[2]}. Complete your profile to check your personal eligibility."
 
         # general / fallback for identified program
@@ -324,8 +348,13 @@ def _fallback_answer(request: CounselorRequest, entities: Dict[str, Any]) -> str
         names = ", ".join([f"{r['program']} at {r['university']} ({r['match_score']:.0f}% match)" for r in top])
         return f"Your top recommendations are: {names}."
 
-    if not recommendations:
+    if not recommendations and not has_profile:
         return "Complete your profile so I can give you grounded, student-specific answers."
+
+    if recommendations:
+        top = recommendations[:3]
+        names = ", ".join([f"{r['program']} at {r['university']} ({r['match_score']:.0f}% match)" for r in top])
+        return f"Based on your profile ({profile.get('preferred_program', '—')}, Matric: {profile.get('matric_percentage', '—')}%, Inter: {profile.get('intermediate_percentage', '—')}%), your top matches are: {names}."
 
     return "I don't have enough verified information to determine that."
 

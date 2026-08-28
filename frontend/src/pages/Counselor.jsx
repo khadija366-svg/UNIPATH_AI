@@ -12,7 +12,7 @@ const suggestions = [
 ]
 
 export default function Counselor() {
-  const { profile, analysis } = useProfile()
+  const { profile, analysis, setAnalysis, loading, setLoading } = useProfile()
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -21,12 +21,22 @@ export default function Counselor() {
     },
   ])
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Auto-load analysis when profile is complete but analysis is not yet available
+  useEffect(() => {
+    if (!analysis && isCompleteFn(profile)) {
+      setLoading(true)
+      api.analyzeProfile(normalizeProfile(profile))
+        .then((data) => setAnalysis(data))
+        .catch(() => {})
+        .finally(() => setLoading(false))
+    }
+  }, [analysis, profile, setAnalysis, setLoading])
 
   const sendMessage = async (text) => {
     if (!text.trim()) return
@@ -227,4 +237,15 @@ function normalizeProfile(profile) {
     budget: Number(profile.budget) || 0,
     tests: profile.tests || [],
   }
+}
+
+function isCompleteFn(profile) {
+  return (
+    profile.name &&
+    profile.matric_percentage !== '' &&
+    profile.intermediate_percentage !== '' &&
+    profile.qualification &&
+    profile.preferred_program &&
+    profile.budget !== ''
+  )
 }

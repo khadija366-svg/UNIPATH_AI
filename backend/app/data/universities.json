@@ -404,7 +404,11 @@
             "minimum_score": null
           },
           "merit_formula": {
-            "components": {}
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
           },
           "fees": {
             "amount": 650000,
@@ -434,7 +438,11 @@
             "minimum_score": null
           },
           "merit_formula": {
-            "components": {}
+            "components": {
+              "matric": 0.1,
+              "intermediate": 0.4,
+              "entry_test": 0.5
+            }
           },
           "fees": {
             "amount": 700000,
