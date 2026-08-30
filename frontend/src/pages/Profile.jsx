@@ -26,14 +26,8 @@ const qualifications = [
 const programs = [
   'Computer Science',
   'Software Engineering',
-  'Artificial Intelligence',
-  'Data Science',
   'Electrical Engineering',
   'Business Administration',
-  'Mechanical Engineering',
-  'Civil Engineering',
-  'Pharmacy',
-  'Psychology',
 ]
 
 const testOptions = TEST_OPTIONS

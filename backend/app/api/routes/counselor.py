@@ -8,7 +8,7 @@ from openai import OpenAI
 
 from app.schemas.counselor import CounselorRequest, CounselorResponse
 from app.core.recommendations import generate_recommendations
-from app.services.university_service import get_all_programs
+from app.services.university_service import get_all_programs, PROGRAM_ALIASES
 from app.config import GROQ_API_KEY, GROQ_MODEL
 
 logger = logging.getLogger(__name__)
@@ -71,23 +71,9 @@ def _extract_entities(message: str, programs: List[Dict[str, Any]]) -> Dict[str,
         if alias in m_lower:
             matched_uni_ids.add(uid)
 
-    # Program keyword aliases
-    program_aliases = {
-        "bscs": "computer_science",
-        "bs computer science": "computer_science",
-        "computer science": "computer_science",
-        "bsse": "software_engineering",
-        "bs software engineering": "software_engineering",
-        "software engineering": "software_engineering",
-        "bsee": "electrical_engineering",
-        "bs electrical engineering": "electrical_engineering",
-        "electrical engineering": "electrical_engineering",
-        "bba": "business_administration",
-        "business administration": "business_administration",
-    }
-
+    # Program aliases (centralized in university_service.PROGRAM_ALIASES)
     matched_program_names = set()
-    for alias, norm in program_aliases.items():
+    for alias, norm in PROGRAM_ALIASES.items():
         if alias in m_lower or alias in m_norm:
             matched_program_names.add(norm)
 

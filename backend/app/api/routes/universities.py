@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 from app.services.university_service import load_universities, normalize_program_name
 
 router = APIRouter()
@@ -40,4 +40,7 @@ def get_university(university_id: str):
     for uni in load_universities():
         if uni["university_id"] == university_id:
             return uni
-    return {"error": {"code": "NOT_FOUND", "message": "University not found"}}
+    raise HTTPException(
+        status_code=404,
+        detail={"code": "NOT_FOUND", "message": "University not found"},
+    )

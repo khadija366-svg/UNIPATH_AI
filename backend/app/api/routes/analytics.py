@@ -2,6 +2,7 @@ from collections import defaultdict
 from fastapi import APIRouter
 from app.schemas.profile import StudentProfile
 from app.core.recommendations import generate_recommendations
+from app.core.budget import annualize_fee
 
 router = APIRouter()
 
@@ -23,13 +24,14 @@ def get_analytics(profile: StudentProfile):
         test_counts[rec["test_status"]] += 1
         program_counts[rec["program"]] += 1
         if rec["fee"]:
+            annual = annualize_fee(rec["fee"], rec.get("fee_period", "semester")) or 0
             fee_comparison.append({
                 "program_id": rec["program_id"],
                 "university": rec["university"],
                 "program": rec["program"],
-                "fee": rec["fee"] * 2,
+                "fee": annual,
             })
-            max_fee = max(max_fee, rec["fee"] * 2)
+            max_fee = max(max_fee, annual)
 
     fee_comparison.sort(key=lambda x: x["fee"])
 

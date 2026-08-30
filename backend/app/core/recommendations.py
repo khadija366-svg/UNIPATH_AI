@@ -30,6 +30,7 @@ def evaluate_program(profile: Dict[str, Any], program: Dict[str, Any]) -> Dict[s
         "test_detail": test_status["detail"],
         "merit": merit,
         "fee": program.get("fees", {}).get("amount"),
+        "fee_period": program.get("fees", {}).get("period", "semester"),
         "budget_status": budget["status"],
         "budget_detail": budget["detail"],
         "deadline_status": deadline["status"],
@@ -50,6 +51,12 @@ def calculate_match_score(evaluation: Dict[str, Any]) -> float:
         academic_fit = 40
     elif evaluation["eligibility"]["status"] == "INFORMATION_MISSING":
         academic_fit = 20
+
+    # Fold entry-test status into academic fit (missing/invalid test reduces
+    # the score but does not zero it — it is recoverable, not a hard rejection).
+    test_status = evaluation.get("test_status", "")
+    if test_status in ("TEST_REQUIRED", "TEST_SCORE_INVALID"):
+        academic_fit = max(academic_fit - 15, 0)
 
     program_match_score = {"EXACT_MATCH": 25, "RELATED_MATCH": 15, "NO_MATCH": 0}.get(evaluation["program_match"], 0)
 
@@ -88,6 +95,10 @@ def build_reasons(evaluation: Dict[str, Any]) -> List[str]:
         reasons.append("Admission closing soon")
     if evaluation["test_status"] == "ACCEPTED_TEST_AVAILABLE":
         reasons.append("Accepted entry test available")
+    elif evaluation["test_status"] == "TEST_REQUIRED":
+        reasons.append("Accepted entry test not yet provided")
+    elif evaluation["test_status"] == "TEST_SCORE_INVALID":
+        reasons.append("Entry test score below minimum requirement")
     if evaluation["merit"] is not None:
         reasons.append(f"Calculated merit: {evaluation['merit']}%")
     if evaluation["confidence"] == "HIGH":

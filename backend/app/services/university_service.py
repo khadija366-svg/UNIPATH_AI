@@ -1,8 +1,29 @@
 import json
 import os
+import re
 from typing import List, Dict, Any
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "universities.json")
+
+# Single source of truth for program-name normalization.
+# Keys are lowercase aliases; values are the normalized_name used in universities.json.
+PROGRAM_ALIASES: Dict[str, str] = {
+    # Computer Science
+    "bscs": "computer_science",
+    "bs computer science": "computer_science",
+    "computer science": "computer_science",
+    # Software Engineering
+    "bsse": "software_engineering",
+    "bs software engineering": "software_engineering",
+    "software engineering": "software_engineering",
+    # Electrical Engineering
+    "bsee": "electrical_engineering",
+    "bs electrical engineering": "electrical_engineering",
+    "electrical engineering": "electrical_engineering",
+    # Business Administration
+    "bba": "business_administration",
+    "business administration": "business_administration",
+}
 
 
 def load_universities() -> List[Dict[str, Any]]:
@@ -39,4 +60,8 @@ def get_university_by_id(university_id: str) -> Dict[str, Any] | None:
 
 
 def normalize_program_name(name: str) -> str:
-    return name.lower().replace("bs ", "").replace("bsc", "").replace("bscs", "computer_science").replace(" ", "_").strip("_")
+    lower = name.strip().lower()
+    if lower in PROGRAM_ALIASES:
+        return PROGRAM_ALIASES[lower]
+    # Fallback: lowercase + non-alphanumeric to underscore
+    return re.sub(r"[^a-z0-9]+", "_", lower).strip("_")
