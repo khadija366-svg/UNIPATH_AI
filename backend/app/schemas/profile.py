@@ -5,6 +5,7 @@ from app.services.test_service import get_test_total
 
 
 class TestScore(BaseModel):
+    __test__ = False
     name: str
     total: float = Field(..., gt=0)
     score: float = Field(..., ge=0)

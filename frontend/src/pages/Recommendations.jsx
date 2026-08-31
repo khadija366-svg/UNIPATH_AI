@@ -9,17 +9,18 @@ import { EmptyState } from '../components/ui/EmptyState'
 
 export default function Recommendations() {
   const navigate = useNavigate()
-  const { profile, analysis, setAnalysis, loading, setLoading } = useProfile()
+  const { profile, analysis, setAnalysis, loading, setLoading, isComplete } = useProfile()
   const [selected, setSelected] = useState([])
 
   useEffect(() => {
-    if (!analysis && isComplete(profile)) {
+    if (!analysis && isComplete()) {
       setLoading(true)
       api.analyzeProfile(normalizeProfile(profile))
         .then((data) => setAnalysis(data))
+        .catch(() => {})
         .finally(() => setLoading(false))
     }
-  }, [analysis, profile, setAnalysis, setLoading])
+  }, [analysis, profile, isComplete, setAnalysis, setLoading])
 
   const recommendations = analysis?.recommendations || []
 
@@ -47,7 +48,7 @@ export default function Recommendations() {
     )
   }
 
-  if (!isComplete(profile)) {
+  if (!isComplete()) {
     return (
       <div className="page">
         <EmptyState
@@ -179,6 +180,29 @@ export default function Recommendations() {
           align-items: center;
           gap: var(--space-sm);
         }
+        .rec-breakdown {
+          margin-top: var(--space-md);
+          padding: var(--space-md);
+          background: var(--surface-soft);
+          border-radius: var(--radius-md);
+          font-size: var(--text-xs);
+        }
+        .rec-breakdown-title {
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: var(--text-secondary);
+          margin-bottom: 6px;
+        }
+        .rec-breakdown-items {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--space-md);
+        }
+        .rec-breakdown-chip {
+          display: inline-flex;
+          gap: 4px;
+        }
         .rec-source {
           margin-top: var(--space-md);
           padding-top: var(--space-md);
@@ -229,10 +253,10 @@ function RecommendationCard({ rec, selected, onToggle }) {
         </div>
         <div className="rec-grid-item">
           <div className="rec-grid-label">Test</div>
-          <div className="rec-grid-value">{rec.test_status || 'Not Required'}</div>
+          <div className="rec-grid-value">{rec.test_detail || rec.test_status || 'Not Required'}</div>
         </div>
         <div className="rec-grid-item">
-          <div className="rec-grid-label">Fee</div>
+          <div className="rec-grid-label">Fee (Semester)</div>
           <div className="rec-grid-value">{rec.fee ? `PKR ${Number(rec.fee).toLocaleString()}` : 'Unknown'}</div>
         </div>
         <div className="rec-grid-item">
@@ -248,6 +272,19 @@ function RecommendationCard({ rec, selected, onToggle }) {
           <div className="rec-grid-value">{rec.confidence || 'Medium'}</div>
         </div>
       </div>
+
+      {rec.merit_breakdown && rec.merit_breakdown.length > 0 && (
+        <div className="rec-breakdown">
+          <div className="rec-breakdown-title">Merit Breakdown ({rec.merit}%)</div>
+          <div className="rec-breakdown-items">
+            {rec.merit_breakdown.map((item, idx) => (
+              <span key={idx} className="rec-breakdown-chip">
+                <strong>{item.component}:</strong> {item.value}% × {Math.round(item.weight * 100)}% = <strong>{item.contribution}%</strong>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="rec-why">
         <div className="rec-why-title">Why this match?</div>
@@ -270,17 +307,6 @@ function RecommendationCard({ rec, selected, onToggle }) {
         </button>
       </div>
     </div>
-  )
-}
-
-function isComplete(profile) {
-  return (
-    profile.name &&
-    profile.matric_percentage !== '' &&
-    profile.intermediate_percentage !== '' &&
-    profile.qualification &&
-    profile.preferred_program &&
-    profile.budget !== ''
   )
 }
 

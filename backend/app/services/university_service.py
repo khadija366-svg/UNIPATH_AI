@@ -12,17 +12,75 @@ PROGRAM_ALIASES: Dict[str, str] = {
     "bscs": "computer_science",
     "bs computer science": "computer_science",
     "computer science": "computer_science",
+    "bachelor of science in computer science": "computer_science",
+    "bs cs": "computer_science",
+    "cs": "computer_science",
+
     # Software Engineering
     "bsse": "software_engineering",
     "bs software engineering": "software_engineering",
     "software engineering": "software_engineering",
+    "bachelor of science in software engineering": "software_engineering",
+    "bs se": "software_engineering",
+    "se": "software_engineering",
+
+    # Artificial Intelligence
+    "bsai": "artificial_intelligence",
+    "bs artificial intelligence": "artificial_intelligence",
+    "artificial intelligence": "artificial_intelligence",
+    "bs ai": "artificial_intelligence",
+    "ai": "artificial_intelligence",
+
+    # Data Science
+    "bsds": "data_science",
+    "bs data science": "data_science",
+    "data science": "data_science",
+    "bs ds": "data_science",
+    "ds": "data_science",
+
+    # Information Technology
+    "bsit": "information_technology",
+    "bs information technology": "information_technology",
+    "information technology": "information_technology",
+    "bs it": "information_technology",
+    "it": "information_technology",
+
     # Electrical Engineering
     "bsee": "electrical_engineering",
     "bs electrical engineering": "electrical_engineering",
     "electrical engineering": "electrical_engineering",
-    # Business Administration
+    "bs ee": "electrical_engineering",
+    "ee": "electrical_engineering",
+
+    # Computer Engineering
+    "bsce": "computer_engineering",
+    "bs computer engineering": "computer_engineering",
+    "computer engineering": "computer_engineering",
+    "bscpe": "computer_engineering",
+
+    # Mechanical Engineering
+    "bsme": "mechanical_engineering",
+    "bs mechanical engineering": "mechanical_engineering",
+    "mechanical engineering": "mechanical_engineering",
+    "bs me": "mechanical_engineering",
+
+    # Civil Engineering
+    "civil engineering": "civil_engineering",
+    "bs civil engineering": "civil_engineering",
+
+    # Business Administration & Management
     "bba": "business_administration",
     "business administration": "business_administration",
+    "bachelor of business administration": "business_administration",
+    "bsc management science": "business_administration",
+    "management science": "business_administration",
+
+    # Accounting and Finance
+    "bsaf": "accounting_finance",
+    "bsc accounting & finance": "accounting_finance",
+    "bsc accounting and finance": "accounting_finance",
+    "accounting and finance": "accounting_finance",
+    "accounting & finance": "accounting_finance",
 }
 
 
@@ -60,6 +118,8 @@ def get_university_by_id(university_id: str) -> Dict[str, Any] | None:
 
 
 def normalize_program_name(name: str) -> str:
+    if not name:
+        return ""
     lower = name.strip().lower()
     if lower in PROGRAM_ALIASES:
         return PROGRAM_ALIASES[lower]

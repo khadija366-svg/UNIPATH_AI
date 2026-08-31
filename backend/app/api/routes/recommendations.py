@@ -1,16 +1,15 @@
 from fastapi import APIRouter
 from app.schemas.profile import StudentProfile
-from app.core.recommendations import generate_recommendations, evaluate_program
-from app.services.university_service import get_all_programs
+from app.core.recommendations import run_orchestrated_analysis
 from app.config import DATASET_VERSION
-from app.core.deadlines import evaluate_deadline
 
 router = APIRouter()
 
 
 def build_analysis(profile: StudentProfile):
     profile_dict = profile.model_dump()
-    recommendations = generate_recommendations(profile_dict)
+    orchestrated = run_orchestrated_analysis(profile_dict)
+    recommendations = orchestrated["recommendations"]
 
     program_matches = []
     for rec in recommendations:
@@ -35,8 +34,8 @@ def build_analysis(profile: StudentProfile):
 
     stats = {
         "matched": len(recommendations),
-        "eligible": sum(1 for r in recommendations if r["eligibility"]["status"] == "ELIGIBLE"),
-        "strong": sum(1 for r in recommendations if r["match_score"] >= 75),
+        "eligible": sum(1 for r in recommendations if r.get("eligibility", {}).get("status") == "ELIGIBLE"),
+        "strong": sum(1 for r in recommendations if r.get("match_score", 0) >= 75),
         "deadlines": len(deadlines),
     }
 
@@ -49,12 +48,15 @@ def build_analysis(profile: StudentProfile):
             "preferred_program": profile.preferred_program,
             "budget": profile.budget,
             "location": profile.location,
+            "tests": [t.model_dump() for t in (profile.tests or [])],
         },
         "program_matches": program_matches,
         "evaluations": recommendations,
         "recommendations": recommendations,
         "deadlines": deadlines,
         "stats": stats,
+        "successful_universities": orchestrated["successful_universities"],
+        "failed_universities": orchestrated["failed_universities"],
         "dataset_version": DATASET_VERSION,
     }
 
@@ -66,4 +68,6 @@ def analyze_profile(profile: StudentProfile):
 
 @router.post("/recommendations")
 def get_recommendations(profile: StudentProfile):
-    return {"recommendations": generate_recommendations(profile.model_dump())}
+    profile_dict = profile.model_dump()
+    orchestrated = run_orchestrated_analysis(profile_dict)
+    return {"recommendations": orchestrated["recommendations"]}

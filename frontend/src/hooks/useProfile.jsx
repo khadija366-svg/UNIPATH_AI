@@ -1,0 +1,106 @@
+import React, { createContext, useContext, useState, useEffect } from 'react'
+
+const STORAGE_KEY_PROFILE = 'unipath_profile'
+const STORAGE_KEY_ANALYSIS = 'unipath_analysis'
+
+const defaultProfile = {
+  name: '',
+  matric_percentage: '',
+  intermediate_percentage: '',
+  qualification: '',
+  subjects: [],
+  tests: [],
+  preferred_program: '',
+  budget: '',
+  location: 'Lahore',
+}
+
+function loadProfile() {
+  const saved = localStorage.getItem(STORAGE_KEY_PROFILE)
+  if (saved) {
+    try {
+      return { ...defaultProfile, ...JSON.parse(saved) }
+    } catch {
+      // ignore
+    }
+  }
+  return defaultProfile
+}
+
+function loadAnalysis() {
+  const saved = localStorage.getItem(STORAGE_KEY_ANALYSIS)
+  if (saved) {
+    try {
+      return JSON.parse(saved)
+    } catch {
+      // ignore
+    }
+  }
+  return null
+}
+
+const ProfileContext = createContext(null)
+
+export function ProfileProvider({ children }) {
+  const [profile, setProfile] = useState(loadProfile)
+  const [analysis, setAnalysisState] = useState(loadAnalysis)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(profile))
+  }, [profile])
+
+  const setAnalysis = (data) => {
+    setAnalysisState(data)
+    if (data) {
+      localStorage.setItem(STORAGE_KEY_ANALYSIS, JSON.stringify(data))
+    } else {
+      localStorage.removeItem(STORAGE_KEY_ANALYSIS)
+    }
+  }
+
+  const updateProfile = (updates) => {
+    setProfile((prev) => ({ ...prev, ...updates }))
+  }
+
+  const setField = (field, value) => {
+    setProfile((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const isComplete = () => {
+    return (
+      Boolean(profile.name) &&
+      profile.matric_percentage !== '' &&
+      profile.intermediate_percentage !== '' &&
+      Boolean(profile.qualification) &&
+      Boolean(profile.preferred_program) &&
+      profile.budget !== ''
+    )
+  }
+
+  return (
+    <ProfileContext.Provider
+      value={{
+        profile,
+        setProfile,
+        updateProfile,
+        setField,
+        analysis,
+        setAnalysis,
+        loading,
+        setLoading,
+        isComplete,
+      }}
+    >
+      {children}
+    </ProfileContext.Provider>
+  )
+}
+
+export function useProfile() {
+  const context = useContext(ProfileContext)
+  if (!context) {
+    throw new Error('useProfile must be used within a ProfileProvider')
+  }
+  return context
+}

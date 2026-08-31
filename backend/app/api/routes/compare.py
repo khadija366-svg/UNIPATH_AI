@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel
-from app.schemas.profile import StudentProfile
 from app.core.recommendations import evaluate_program, calculate_match_score, categorize, build_reasons
 from app.services.university_service import get_all_programs
 
@@ -34,11 +33,18 @@ def compare_programs(request: CompareRequest):
                 "university_id": program["university_id"],
                 "university": program["university_name"],
                 "program": program["name"],
+                "campus": program.get("campus", "Lahore"),
+                "city": program.get("city", "Lahore"),
                 "eligibility_status": ev["eligibility"]["status"],
+                "eligibility_details": ev["eligibility"],
                 "test_status": ev["test_status"],
+                "test_detail": ev.get("test_detail"),
                 "merit": ev["merit"],
-                "fee": ev["fee"],
+                "merit_breakdown": ev.get("merit_breakdown"),
+                "fee": ev.get("annual_fee") or ev.get("fee"),
+                "semester_fee": ev.get("fee"),
                 "deadline_status": ev["deadline_status"],
+                "deadline_date": ev.get("deadline_date"),
                 "program_match": ev["program_match"],
                 "match_score": score,
                 "confidence": ev["confidence"],
