@@ -13,6 +13,9 @@ const filters = {
 export default function Universities() {
   const [universities, setUniversities] = useState([])
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [scrapeStatus, setScrapeStatus] = useState('cache')
+  const [scrapeMessage, setScrapeMessage] = useState('Showing cached official data.')
   const [filter, setFilter] = useState({ program: '', city: '', test_required: '' })
 
   useEffect(() => {
@@ -24,10 +27,35 @@ export default function Universities() {
     try {
       const data = await api.getUniversities(filter)
       setUniversities(data.universities || [])
+      setScrapeStatus('cache')
+      setScrapeMessage('Showing cached official data.')
     } catch {
       setUniversities([])
+      setScrapeStatus('failed')
+      setScrapeMessage('University data could not be loaded.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const refreshLiveData = async () => {
+    setRefreshing(true)
+    setScrapeStatus('loading')
+    setScrapeMessage('Checking official university pages...')
+    try {
+      const data = await api.refreshUniversities()
+      setUniversities(data.universities || [])
+      setScrapeStatus(data.status === 'success' ? 'live' : data.status === 'partial' ? 'partial' : 'failed')
+      setScrapeMessage(data.status === 'success'
+        ? 'Official pages checked successfully.'
+        : data.status === 'partial'
+          ? 'Some official pages failed; cached data is shown for those universities.'
+          : 'Live checks failed; cached official data is shown.')
+    } catch {
+      setScrapeStatus('failed')
+      setScrapeMessage('Live check failed; cached official data is shown.')
+    } finally {
+      setRefreshing(false)
     }
   }
 
@@ -41,6 +69,13 @@ export default function Universities() {
       <div className="page-header">
         <h1 className="page-title">Explore Universities</h1>
         <p className="page-subtitle">Browse verified programs and admission requirements.</p>
+        <div className={`scrape-status scrape-${scrapeStatus}`}>
+          <span>{scrapeStatus === 'live' ? 'LIVE' : scrapeStatus === 'loading' ? 'CHECKING' : scrapeStatus === 'failed' ? 'FAILED' : scrapeStatus === 'partial' ? 'PARTIAL' : 'CACHE'}</span>
+          <span>{scrapeMessage}</span>
+          <button className="btn btn-secondary" onClick={refreshLiveData} disabled={refreshing}>
+            {refreshing ? 'Checking...' : 'Check official pages'}
+          </button>
+        </div>
       </div>
 
       <div className="card" style={{ marginBottom: 'var(--space-lg)' }}>
@@ -106,6 +141,19 @@ export default function Universities() {
           grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
           gap: var(--space-md);
         }
+        .scrape-status {
+          display: flex;
+          align-items: center;
+          gap: var(--space-sm);
+          flex-wrap: wrap;
+          margin-top: var(--space-md);
+          font-size: var(--text-sm);
+        }
+        .scrape-status > span:first-child { font-weight: 800; }
+        .scrape-live > span:first-child { color: var(--success); }
+        .scrape-failed > span:first-child { color: var(--danger); }
+        .scrape-partial > span:first-child { color: var(--warning); }
+        .scrape-cache > span:first-child, .scrape-loading > span:first-child { color: var(--text-secondary); }
         .filter-group {
           display: flex;
           flex-direction: column;
@@ -185,8 +233,8 @@ function UniversityCard({ program }) {
           <div className="university-card-title">{program.university_name}</div>
           <div className="university-card-subtitle">{program.campus} Campus</div>
         </div>
-        <Badge variant={program.data_confidence === 'HIGH' ? 'success' : 'neutral'}>
-          {program.data_confidence || 'CACHED'}
+        <Badge variant={program.source?.data_source === 'live' ? 'success' : 'neutral'}>
+          {program.source?.data_source === 'live' ? 'LIVE' : 'CACHE'}
         </Badge>
       </div>
 

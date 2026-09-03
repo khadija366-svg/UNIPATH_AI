@@ -91,6 +91,8 @@ def load_universities() -> List[Dict[str, Any]]:
     for uni in universities:
         source = uni.get("source", {})
         confidence = source.get("confidence", "CACHED")
+        source.setdefault("data_source", "cache")
+        source.setdefault("status", "cached")
         for program in uni.get("programs", []):
             program.setdefault("source", source)
             program.setdefault("data_confidence", confidence)

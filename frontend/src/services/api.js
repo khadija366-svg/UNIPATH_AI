@@ -33,6 +33,11 @@ export const api = {
 
   getUniversity: (id) => request(`/api/universities/${id}`),
 
+  refreshUniversities: (ids = []) => {
+    const params = ids.length ? `?ids=${encodeURIComponent(ids.join(','))}` : ''
+    return request(`/api/universities/refresh${params}`, { method: 'POST' })
+  },
+
   getRecommendations: (profile) => request('/api/recommendations', {
     method: 'POST',
     body: JSON.stringify(profile),

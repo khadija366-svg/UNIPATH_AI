@@ -78,6 +78,7 @@ export default function Sources() {
                     <th>University</th>
                     <th>Campus</th>
                     <th>Source Type</th>
+                    <th>Data Source</th>
                     <th>Session</th>
                     <th>Confidence</th>
                     <th>Verified</th>
@@ -89,6 +90,7 @@ export default function Sources() {
                       <td><strong>{u.name}</strong></td>
                       <td>{u.campus}</td>
                       <td>{u.source?.type || 'CACHED'}</td>
+                      <td><Badge variant={u.source?.data_source === 'live' ? 'success' : 'neutral'}>{u.source?.data_source === 'live' ? 'LIVE' : 'CACHE'}</Badge></td>
                       <td>{u.admission_cycle}</td>
                       <td><Badge variant={u.source?.confidence === 'HIGH' ? 'success' : 'neutral'}>{u.source?.confidence || 'MEDIUM'}</Badge></td>
                       <td>{u.source?.verified_at || '—'}</td>

@@ -7,7 +7,7 @@
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://www.cuilahore.edu.pk/admissions",
+        "url": "https://lahore.comsats.edu.pk/admissions",
         "type": "official",
         "verified_at": "2026-08-20",
         "academic_session": "2026",
@@ -490,7 +490,7 @@
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://www.uet.edu.pk/admissions",
+        "url": "https://admission.uet.edu.pk/",
         "type": "official",
         "verified_at": "2026-08-18",
         "academic_session": "2026",
@@ -752,7 +752,7 @@
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://pu.edu.pk/admissions",
+        "url": "https://pucit.edu.pk/admissions",
         "type": "official",
         "verified_at": "2026-08-15",
         "academic_session": "2026",
@@ -1014,7 +1014,7 @@
           "deadline": "2026-08-28",
           "deadline_status": "CLOSING_SOON",
           "source": {
-            "url": "https://admission.lums.edu.pk/undergraduate-programmes",
+            "url": "https://lums.edu.pk/programmes",
             "type": "official",
             "verified_at": "2026-08-10",
             "academic_session": "2026",
