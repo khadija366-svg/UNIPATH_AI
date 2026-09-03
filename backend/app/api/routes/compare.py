@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel
+from app.schemas.profile import StudentProfile
 from app.core.recommendations import evaluate_program, calculate_match_score, categorize, build_reasons
 from app.services.university_service import get_all_programs
 
@@ -13,19 +14,20 @@ class Selection(BaseModel):
 
 
 class CompareRequest(BaseModel):
-    profile: dict
+    profile: StudentProfile
     selections: List[Selection]
 
 
 @router.post("/compare")
 def compare_programs(request: CompareRequest):
+    profile_dict = request.profile.model_dump()
     programs = {p["program_id"]: p for p in get_all_programs()}
     items = []
 
     for sel in request.selections:
         program = programs.get(sel.program_id)
         if program and program["university_id"] == sel.university_id:
-            ev = evaluate_program(request.profile, program)
+            ev = evaluate_program(profile_dict, program)
             score = calculate_match_score(ev)
             ev["match_score"] = score
             items.append({

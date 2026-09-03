@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import { api } from '../services/api'
@@ -9,8 +9,8 @@ import { EmptyState } from '../components/ui/EmptyState'
 
 export default function Recommendations() {
   const navigate = useNavigate()
-  const { profile, analysis, setAnalysis, loading, setLoading, isComplete } = useProfile()
-  const [selected, setSelected] = useState([])
+  const { profile, analysis, setAnalysis, loading, setLoading, isComplete, compareSelections, setCompareSelections } = useProfile()
+  const selected = compareSelections
 
   useEffect(() => {
     if (!analysis && isComplete()) {
@@ -25,7 +25,7 @@ export default function Recommendations() {
   const recommendations = analysis?.recommendations || []
 
   const toggleCompare = (rec) => {
-    setSelected((prev) => {
+    setCompareSelections((prev) => {
       const exists = prev.find((r) => r.program_id === rec.program_id)
       if (exists) return prev.filter((r) => r.program_id !== rec.program_id)
       if (prev.length >= 3) return prev
@@ -34,7 +34,7 @@ export default function Recommendations() {
   }
 
   const goToCompare = () => {
-    navigate('/compare', { state: { selections: selected } })
+    navigate('/compare')
   }
 
   if (loading) {

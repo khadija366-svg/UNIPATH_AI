@@ -16,7 +16,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 SYSTEM_PROMPT = (
-    "You are UniPath AI Admission Counselor. "
+    "You are UniPath AI Admission Counselor, chatting with a student. "
+    "Answer like a helpful chat assistant, not a report generator: reply conversationally, in plain sentences or short bullet points, "
+    "sized to the question. "
+    "Answer ONLY what the student actually asked. If they ask about fees, give the fee and move on — don't also restate eligibility, "
+    "test requirements, deadline, and merit unless they asked about those too or explicitly want an overview/full comparison. "
+    "Only use a table when the student is comparing multiple programs/universities against each other, or explicitly asks for one. "
+    "For a single-fact or single-program question, a short, direct answer is correct even if you have more verified data available. "
     "Use ONLY the provided verified university information and calculated UniPath system results. "
     "Never invent: eligibility requirements, merit formulas, fees, deadlines, tests, programs, or admission probabilities. "
     "Never claim guaranteed admission. "
@@ -70,13 +76,13 @@ def _extract_entities(message: str, programs: List[Dict[str, Any]]) -> Dict[str,
 
     matched_uni_ids = set()
     for alias, uid in uni_aliases.items():
-        if alias in m_lower:
+        if re.search(rf"\b{re.escape(alias)}\b", m_norm):
             matched_uni_ids.add(uid)
 
     # Program aliases
     matched_program_names = set()
     for alias, norm in PROGRAM_ALIASES.items():
-        if alias in m_lower or alias in m_norm:
+        if re.search(rf"\b{re.escape(alias)}\b", m_norm):
             matched_program_names.add(norm)
 
     # Direct university/program matches from data

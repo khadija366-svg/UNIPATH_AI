@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 
 const STORAGE_KEY_PROFILE = 'unipath_profile'
 const STORAGE_KEY_ANALYSIS = 'unipath_analysis'
+const STORAGE_KEY_COMPARE = 'unipath_compare_selections'
 
 const defaultProfile = {
   name: '',
@@ -39,16 +40,37 @@ function loadAnalysis() {
   return null
 }
 
+function loadCompareSelections() {
+  const saved = localStorage.getItem(STORAGE_KEY_COMPARE)
+  if (saved) {
+    try {
+      return JSON.parse(saved)
+    } catch {
+      // ignore
+    }
+  }
+  return []
+}
+
 const ProfileContext = createContext(null)
 
 export function ProfileProvider({ children }) {
   const [profile, setProfile] = useState(loadProfile)
   const [analysis, setAnalysisState] = useState(loadAnalysis)
   const [loading, setLoading] = useState(false)
+  const [compareSelections, setCompareSelectionsState] = useState(loadCompareSelections)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(profile))
   }, [profile])
+
+  const setCompareSelections = (updater) => {
+    setCompareSelectionsState((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      localStorage.setItem(STORAGE_KEY_COMPARE, JSON.stringify(next))
+      return next
+    })
+  }
 
   const setAnalysis = (data) => {
     setAnalysisState(data)
@@ -90,6 +112,8 @@ export function ProfileProvider({ children }) {
         loading,
         setLoading,
         isComplete,
+        compareSelections,
+        setCompareSelections,
       }}
     >
       {children}

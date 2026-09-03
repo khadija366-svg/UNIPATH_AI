@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import { api } from '../services/api'
 import { Loading } from '../components/ui/Loading'
@@ -7,24 +7,27 @@ import { Badge } from '../components/ui/Badge'
 import { EmptyState } from '../components/ui/EmptyState'
 
 export default function Compare() {
-  const location = useLocation()
   const navigate = useNavigate()
-  const { profile } = useProfile()
-  const [selections, setSelections] = useState(location.state?.selections || [])
+  const { profile, compareSelections } = useProfile()
+  const selections = compareSelections
   const [comparison, setComparison] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     if (selections.length > 0) {
       setLoading(true)
+      setError(null)
       api.comparePrograms({
         profile: normalizeProfile(profile),
         selections: selections.map((s) => ({ university_id: s.university_id, program_id: s.program_id })),
       })
         .then((data) => setComparison(data))
+        .catch((err) => setError(err.message || 'Failed to load comparison.'))
         .finally(() => setLoading(false))
     }
-  }, [selections, profile])
+  }, [selections, profile, retryCount])
 
   const rows = [
     { label: 'Eligibility', key: 'eligibility_status' },
@@ -59,6 +62,13 @@ export default function Compare() {
 
       {loading ? (
         <div className="empty-state"><Loading size={40} /></div>
+      ) : error ? (
+        <EmptyState
+          icon="⚠"
+          title="Couldn't load comparison"
+          description={error}
+          action={<button className="btn btn-primary" onClick={() => setRetryCount((n) => n + 1)}>Retry</button>}
+        />
       ) : (
         <div className="compare-table-wrapper">
           <table className="compare-table">
