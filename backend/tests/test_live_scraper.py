@@ -11,6 +11,7 @@ UNIVERSITY = {
     "university_id": "test_uni",
     "name": "Test University",
     "source": {"url": "https://example.edu/admissions"},
+    "programs": [{"program_id": "test_bscs", "name": "BS Computer Science", "fees": {"amount": 100}}],
 }
 
 
@@ -89,11 +90,11 @@ def test_batch_isolates_failures():
 
 def test_refresh_endpoint_exposes_partial_status_and_cache_fallback():
     mocked_results = [
-        {"university_id": "comsats_lahore", "status": "success", "data_source": "live"},
+        {"university_id": "itu_lahore", "status": "success", "data_source": "live"},
         {"university_id": "fast_lahore", "status": "TIMEOUT", "data_source": "cache"},
     ]
     with patch("app.api.routes.universities.scrape_universities", return_value=mocked_results):
-        response = TestClient(app).post("/api/universities/refresh?ids=comsats_lahore,fast_lahore")
+        response = TestClient(app).post("/api/universities/refresh?ids=itu_lahore,fast_lahore")
 
     assert response.status_code == 200
     assert response.json()["status"] == "partial"

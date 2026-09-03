@@ -332,7 +332,7 @@ export default function Home() {
             ) : (
               <div className="deadlines-list">
                 <DeadlineItem time="09:20" title="FAST" subtitle="BSCS — Closing in 3 days" status="OPEN" />
-                <DeadlineItem time="11:00" title="COMSATS" subtitle="BSCS — Closing in 7 days" status="OPEN" />
+                <DeadlineItem time="11:00" title="ITU Lahore" subtitle="BSCS — Check official deadline" status="OPEN" />
               </div>
             )}
 

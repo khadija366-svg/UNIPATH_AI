@@ -1,13 +1,13 @@
 {
   "universities": [
     {
-      "university_id": "comsats_lahore",
-      "name": "COMSATS University Islamabad",
+      "university_id": "itu_lahore",
+      "name": "Information Technology University",
       "campus": "Lahore",
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://lahore.comsats.edu.pk/admissions",
+        "url": "https://itu.edu.pk/admissions/",
         "type": "official",
         "verified_at": "2026-08-20",
         "academic_session": "2026",
@@ -15,9 +15,9 @@
       },
       "programs": [
         {
-          "program_id": "comsats_lahore_bscs",
-          "university_id": "comsats_lahore",
-          "university_name": "COMSATS University Islamabad",
+          "program_id": "itu_lahore_bscs",
+          "university_id": "itu_lahore",
+          "university_name": "Information Technology University",
           "campus": "Lahore",
           "city": "Lahore",
           "name": "BS Computer Science",
@@ -30,7 +30,7 @@
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["NAT", "NTS"],
+            "accepted_tests": ["ITU Test", "SAT", "USAT"],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -48,7 +48,7 @@
           "deadline": "2026-09-15",
           "deadline_status": "OPEN",
           "source": {
-            "url": "https://www.cuilahore.edu.pk/admissions/cs",
+            "url": "https://itu.edu.pk/admissions/bs-computer-science/",
             "type": "official",
             "verified_at": "2026-08-20",
             "academic_session": "2026",
@@ -56,9 +56,9 @@
           }
         },
         {
-          "program_id": "comsats_lahore_bsse",
-          "university_id": "comsats_lahore",
-          "university_name": "COMSATS University Islamabad",
+          "program_id": "itu_lahore_bsse",
+          "university_id": "itu_lahore",
+          "university_name": "Information Technology University",
           "campus": "Lahore",
           "city": "Lahore",
           "name": "BS Software Engineering",
@@ -71,7 +71,7 @@
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["NAT", "NTS"],
+            "accepted_tests": ["ITU Test", "SAT", "USAT"],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -89,7 +89,7 @@
           "deadline": "2026-09-15",
           "deadline_status": "OPEN",
           "source": {
-            "url": "https://www.cuilahore.edu.pk/admissions/se",
+            "url": "https://itu.edu.pk/admissions/bs-software-engineering/",
             "type": "official",
             "verified_at": "2026-08-20",
             "academic_session": "2026",
@@ -97,9 +97,9 @@
           }
         },
         {
-          "program_id": "comsats_lahore_bsee",
-          "university_id": "comsats_lahore",
-          "university_name": "COMSATS University Islamabad",
+          "program_id": "itu_lahore_bsee",
+          "university_id": "itu_lahore",
+          "university_name": "Information Technology University",
           "campus": "Lahore",
           "city": "Lahore",
           "name": "BS Electrical Engineering",
@@ -112,7 +112,7 @@
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["NAT", "NTS"],
+            "accepted_tests": ["ITU Test", "SAT", "USAT"],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -130,7 +130,7 @@
           "deadline": "2026-09-15",
           "deadline_status": "OPEN",
           "source": {
-            "url": "https://www.cuilahore.edu.pk/admissions/ee",
+            "url": "https://itu.edu.pk/admissions/bs-electrical-engineering/",
             "type": "official",
             "verified_at": "2026-08-20",
             "academic_session": "2026",
@@ -138,9 +138,9 @@
           }
         },
         {
-          "program_id": "comsats_lahore_bsce",
-          "university_id": "comsats_lahore",
-          "university_name": "COMSATS University Islamabad",
+          "program_id": "itu_lahore_bsce",
+          "university_id": "itu_lahore",
+          "university_name": "Information Technology University",
           "campus": "Lahore",
           "city": "Lahore",
           "name": "BS Computer Engineering",
@@ -153,7 +153,7 @@
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["NAT", "NTS"],
+            "accepted_tests": ["ITU Test", "SAT", "USAT"],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -171,7 +171,7 @@
           "deadline": "2026-09-15",
           "deadline_status": "OPEN",
           "source": {
-            "url": "https://www.cuilahore.edu.pk/admissions/ce",
+            "url": "https://itu.edu.pk/admissions/bs-computer-engineering/",
             "type": "official",
             "verified_at": "2026-08-20",
             "academic_session": "2026",
@@ -179,22 +179,22 @@
           }
         },
         {
-          "program_id": "comsats_lahore_bba",
-          "university_id": "comsats_lahore",
-          "university_name": "COMSATS University Islamabad",
+          "program_id": "itu_lahore_bsai",
+          "university_id": "itu_lahore",
+          "university_name": "Information Technology University",
           "campus": "Lahore",
           "city": "Lahore",
-          "name": "BBA",
-          "normalized_name": "business_administration",
+          "name": "BS Artificial Intelligence",
+          "normalized_name": "artificial_intelligence",
           "eligibility": {
-            "minimum_matric": 45,
-            "minimum_intermediate": 45,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
-            "required_subjects": []
+            "minimum_matric": 50,
+            "minimum_intermediate": 50,
+            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
+            "required_subjects": ["Mathematics"]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["NAT", "NTS"],
+            "accepted_tests": ["ITU Test", "SAT", "USAT"],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -212,7 +212,7 @@
           "deadline": "2026-09-15",
           "deadline_status": "OPEN",
           "source": {
-            "url": "https://www.cuilahore.edu.pk/admissions/bba",
+            "url": "https://itu.edu.pk/admissions/bs-artificial-intelligence/",
             "type": "official",
             "verified_at": "2026-08-20",
             "academic_session": "2026",
@@ -228,7 +228,7 @@
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://www.nu.edu.pk/admissions",
+        "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
         "type": "official",
         "verified_at": "2026-08-22",
         "academic_session": "2026",
@@ -973,7 +973,7 @@
       "city": "Lahore",
       "admission_cycle": "2026",
       "source": {
-        "url": "https://lums.edu.pk/admissions",
+        "url": "https://lums.edu.pk/programmes",
         "type": "official",
         "verified_at": "2026-08-10",
         "academic_session": "2026",

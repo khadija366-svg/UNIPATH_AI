@@ -77,7 +77,8 @@ class UniversityParser:
             status = "OPEN" if status_match.group(1).lower() == "open" else "CLOSED"
 
         for program in university.get("programs", []):
-            window_start = text.lower().find(program["name"].lower())
+            program_name = program.get("name", "")
+            window_start = text.lower().find(program_name.lower()) if program_name else -1
             window = text[window_start:window_start + 900] if window_start >= 0 else ""
             fee_match = re.search(r"(?:pkr|rs\.?|rupees?)\s*([\d,]+)", window, re.IGNORECASE)
             program_update: Dict[str, Any] = {}
@@ -92,8 +93,8 @@ class UniversityParser:
         return updates
 
 
-class ComsatsParser(UniversityParser):
-    university_id = "comsats_lahore"
+class ItuParser(UniversityParser):
+    university_id = "itu_lahore"
 
 
 class FastParser(UniversityParser):
@@ -121,7 +122,7 @@ class LumsParser(UniversityParser):
     university_id = "lums"
 
 
-PARSER_REGISTRY = {parser.university_id: parser for parser in (ComsatsParser, FastParser, UetParser, PunjabParser, LumsParser)}
+PARSER_REGISTRY = {parser.university_id: parser for parser in (ItuParser, FastParser, UetParser, PunjabParser, LumsParser)}
 
 
 class BaseScraper:
@@ -224,10 +225,13 @@ class BaseScraper:
                     last_response = response
                     page_text.append(response.content)
                 except FetchError as exc:
-                    failures.append(f"{page_url}: {exc.code}")
+                    failures.append((page_url, exc.code, exc.http_status))
             if not page_text:
-                code = "SOURCE_PAGES_FAILED"
-                raise FetchError(code, "; ".join(failures) or "No source pages were available")
+                first_failure = failures[0][1] if failures else "SOURCE_PAGES_FAILED"
+                code = first_failure if first_failure in {"BLOCKED", "NOT_FOUND", "RATE_LIMITED", "TIMEOUT", "SSL_ERROR", "NETWORK_ERROR", "HTTP_ERROR"} else "SOURCE_PAGES_FAILED"
+                http_status = failures[0][2] if failures else None
+                details = "; ".join(f"{page_url}: {failure_code}" for page_url, failure_code, _ in failures)
+                raise FetchError(code, details or "No source pages were available", http_status)
             combined = Response()
             combined.status_code = last_response.status_code
             combined.headers = last_response.headers
@@ -235,7 +239,7 @@ class BaseScraper:
             fields = self.parse(combined, university)
             fields["source_pages"] = urls
             if failures:
-                fields["source_page_failures"] = failures
+                fields["source_page_failures"] = [f"{page_url}: {failure_code}" for page_url, failure_code, _ in failures]
             result = ScrapeResult(
                 university["university_id"], university["name"], url, "success", "live", timestamp,
                 last_response.status_code, int((time.monotonic() - started) * 1000), fields,

@@ -42,7 +42,7 @@ def test_compare_endpoint(demo_student_profile):
     compare_payload = {
         "profile": demo_student_profile,
         "selections": [
-            {"university_id": "comsats_lahore", "program_id": "comsats_lahore_bscs"},
+            {"university_id": "itu_lahore", "program_id": "itu_lahore_bscs"},
             {"university_id": "uet_lahore", "program_id": "uet_lahore_bscs"},
         ]
     }
@@ -51,7 +51,7 @@ def test_compare_endpoint(demo_student_profile):
     data = response.json()
     assert "items" in data
     assert len(data["items"]) == 2
-    assert data["items"][0]["university_id"] in ["comsats_lahore", "uet_lahore"]
+    assert data["items"][0]["university_id"] in ["itu_lahore", "uet_lahore"]
 
 
 def test_analytics_endpoint(demo_student_profile):

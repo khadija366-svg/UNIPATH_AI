@@ -7,7 +7,7 @@ import { Badge } from '../components/ui/Badge'
 const suggestions = [
   'Which universities offer BSCS under my budget?',
   'Am I eligible for FAST BSCS?',
-  'What entry test do I need for COMSATS?',
+  'What entry test do I need for ITU Lahore?',
   'Explain my top recommendation.',
 ]
 
