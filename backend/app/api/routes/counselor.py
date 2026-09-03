@@ -1,6 +1,7 @@
 import os
 import re
 import logging
+import uuid
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
@@ -14,6 +15,8 @@ from app.config import GROQ_API_KEY, GROQ_MODEL
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+_CONVERSATIONS: Dict[str, List[Dict[str, str]]] = {}
+MAX_HISTORY = 8
 
 SYSTEM_PROMPT = (
     "You are UniPath AI Admission Counselor, chatting with a student. "
@@ -116,6 +119,53 @@ def _extract_entities(message: str, programs: List[Dict[str, Any]]) -> Dict[str,
     }
 
 
+def _conversation_history(request: CounselorRequest) -> List[Dict[str, str]]:
+    conversation_id = request.conversation_id
+    stored = _CONVERSATIONS.get(conversation_id, []) if conversation_id else []
+    supplied = request.history or []
+    return (stored + supplied)[-MAX_HISTORY:]
+
+
+def _resolve_message(message: str, history: List[Dict[str, str]]) -> str:
+    """Give pronoun-only follow-ups the recent user topic without sending all history."""
+    if re.search(r"\b(it|its|there|that|them|their|they)\b", message.lower()) and history:
+        previous_user_messages = [item.get("content", item.get("text", "")) for item in history if item.get("role") == "user"]
+        return " ".join(previous_user_messages[-2:] + [message])
+    return message
+
+
+def _relevant_programs(message: str, programs: List[Dict[str, Any]], entities: Dict[str, Any]) -> List[Dict[str, Any]]:
+    selected = []
+    for program in programs:
+        if entities.get("university_ids") and program["university_id"] not in entities["university_ids"]:
+            continue
+        normalized_message = _normalize(message)
+        program_tokens = _normalize(program.get("name", "")).split()
+        if entities.get("university_ids") or entities.get("program") is program or any(token in normalized_message for token in program_tokens if len(token) > 2):
+            selected.append(program)
+    return selected[:8]
+
+
+def _source_metadata(programs: List[Dict[str, Any]]) -> List[dict]:
+    sources = []
+    seen = set()
+    for program in programs:
+        source = program.get("source", {})
+        key = (program.get("university_id"), program.get("program_id"))
+        if key in seen:
+            continue
+        seen.add(key)
+        sources.append({
+            "university": program.get("university_name"),
+            "program": program.get("name"),
+            "url": source.get("url"),
+            "data_source": source.get("data_source", "cache"),
+            "verified_at": source.get("verified_at"),
+            "confidence": program.get("data_confidence", source.get("confidence", "CACHED")),
+        })
+    return sources
+
+
 def _find_student_result(program: Dict[str, Any], recommendations: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     pid = program.get("program_id")
     for rec in recommendations:
@@ -206,6 +256,8 @@ def _get_recommendations(request: CounselorRequest) -> List[Dict[str, Any]]:
 
 def _build_context(request: CounselorRequest, entities: Dict[str, Any]) -> str:
     program = entities.get("program")
+    relevant = entities.get("relevant_programs", [])
+    intent = entities.get("intent", "general")
     recommendations = _get_recommendations(request)
     profile = request.profile or {}
     has_profile = bool(profile.get("name") or profile.get("preferred_program"))
@@ -232,11 +284,14 @@ def _build_context(request: CounselorRequest, entities: Dict[str, Any]) -> str:
             profile_lines.append("Entry tests: none reported")
         sections.append("\n".join(profile_lines))
 
-    if program:
+    if program and intent not in {"search", "comparison", "recommendation"}:
         sections.append("VERIFIED PROGRAM DATA:\n" + _format_program_data(program))
         result = _find_student_result(program, recommendations)
         if result:
             sections.append("STUDENT-SPECIFIC RESULT:\n" + _format_student_result(result))
+    elif relevant:
+        sections.append("VERIFIED PROGRAM DATA:")
+        sections.extend(_format_program_data(item) for item in relevant)
     elif recommendations:
         sections.append("TOP RECOMMENDATIONS:")
         for rec in recommendations[:4]:
@@ -273,10 +328,12 @@ def _detect_intent(message: str) -> str:
         return "deadline"
     if "eligible" in m or "can i get" in m or "can i apply" in m:
         return "eligibility"
-    if "recommend" in m or "best" in m or "top" in m:
-        return "recommendation"
     if "compare" in m:
         return "comparison"
+    if "recommend" in m or "best" in m or "top" in m:
+        return "recommendation"
+    if "which universities" in m or "what universities" in m or "what programs" in m or "offer" in m:
+        return "search"
     return "general"
 
 
@@ -301,30 +358,71 @@ def _call_groq_llm(system: str, user_content: str) -> Optional[str]:
         return None
 
 
+def _deterministic_answer(intent: str, message: str, programs: List[Dict[str, Any]], recommendations: List[Dict[str, Any]]) -> str:
+    if not programs:
+        if intent in {"search", "comparison", "recommendation"}:
+            return "I don't currently have verified university data matching that question. Please name the university or program you mean."
+        return "I don't currently have verified information for that question. Please specify the university and program."
+    if intent == "fee":
+        return "\n\n".join(f"{p['name']} at {p['university_name']}: {_format_program_data(p).split('Fee: ', 1)[-1].splitlines()[0]}" for p in programs)
+    if intent == "deadline":
+        return "\n\n".join(f"{p['name']} at {p['university_name']}: {p.get('deadline') or 'Deadline not verified'} (status: {p.get('deadline_status', 'UNKNOWN')})" for p in programs)
+    if intent == "eligibility":
+        return "\n\n".join(f"{p['name']} at {p['university_name']}: {_format_program_data(p).split('Eligibility: ', 1)[-1].splitlines()[0]}" for p in programs)
+    return "\n\n".join(f"{p['name']} at {p['university_name']}" for p in programs)
 @router.post("/counselor/chat")
 def chat(request: CounselorRequest):
     message = request.message or ""
-    intent = _detect_intent(message)
+    if not message.strip():
+        from fastapi import HTTPException
+        raise HTTPException(status_code=422, detail={"code": "EMPTY_MESSAGE", "message": "Message cannot be empty"})
+    conversation_id = request.conversation_id or str(uuid.uuid4())
+    history = _conversation_history(request)
+    resolved_message = _resolve_message(message, history)
+    intent = _detect_intent(resolved_message)
 
     if _is_injection_attempt(message):
         return CounselorResponse(
             response="I can only answer based on verified university data and your calculated results. I cannot override official admission criteria.",
             badges=["SYSTEM"],
             intent="safety",
+            conversation_id=conversation_id,
+            sources=[],
         )
 
     programs = _load_program_index()
-    entities = _extract_entities(message, programs)
+    entities = _extract_entities(resolved_message, programs)
+    entities["intent"] = intent
+    entities["relevant_programs"] = _relevant_programs(resolved_message, programs, entities)
     context = _build_context(request, entities)
-    user_content = f"{context}\n\nUser question: {message}"
+    recent_turns = "\n".join(f"{item.get('role', 'user')}: {item.get('content', item.get('text', ''))}" for item in history)
+    user_content = f"RECENT CONVERSATION:\n{recent_turns}\n\n{context}\n\nUser question: {message}"
 
     answer = _call_groq_llm(SYSTEM_PROMPT, user_content)
+    source_programs = (
+        entities.get("relevant_programs", [])
+        if intent in {"search", "comparison", "recommendation"}
+        else ([entities["program"]] if entities.get("program") else entities.get("relevant_programs", []))
+    )
+    sources = _source_metadata(source_programs)
+    recommendations = _get_recommendations(request)
     if answer is not None:
-        return CounselorResponse(response=answer, badges=["AI INSIGHT"], intent=intent)
+        final_answer = answer.strip() or _deterministic_answer(intent, message, source_programs, recommendations)
+        badge = "AI INSIGHT" if answer.strip() else "FACT"
+        _CONVERSATIONS.setdefault(conversation_id, []).extend([
+            {"role": "user", "content": message}, {"role": "assistant", "content": final_answer}
+        ])
+        return CounselorResponse(response=final_answer, badges=[badge], intent=intent, conversation_id=conversation_id, sources=sources, metadata={"model": GROQ_MODEL, "data_source": "verified_project_data"})
 
-    # Truthful fallback when Groq is unavailable/unconfigured (DO NOT fake AI response)
+    fallback = _deterministic_answer(intent, message, source_programs, recommendations)
+    _CONVERSATIONS.setdefault(conversation_id, []).extend([
+        {"role": "user", "content": message}, {"role": "assistant", "content": fallback}
+    ])
     return CounselorResponse(
-        response="AI counselor is temporarily unavailable. Your structured admission results are still available.",
-        badges=["SYSTEM"],
+        response=fallback,
+        badges=["FACT" if source_programs else "SYSTEM"],
         intent=intent,
+        conversation_id=conversation_id,
+        sources=sources,
+        metadata={"llm_available": False, "data_source": "verified_project_data" if source_programs else "none"},
     )

@@ -55,8 +55,8 @@ export const api = {
     body: JSON.stringify(profile),
   }),
 
-  chatWithCounselor: (message, profile = {}, context = {}) => request('/api/counselor/chat', {
+  chatWithCounselor: (message, profile = {}, context = {}, conversationId = null) => request('/api/counselor/chat', {
     method: 'POST',
-    body: JSON.stringify({ message, profile, context }),
+    body: JSON.stringify({ message, profile, context, conversation_id: conversationId }),
   }),
 }

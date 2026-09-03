@@ -7,6 +7,7 @@ from app.api.routes.counselor import (
     _detect_intent,
 )
 from app.schemas.counselor import CounselorRequest
+from fastapi import HTTPException
 
 
 def test_detect_intent():
@@ -65,5 +66,45 @@ def test_counselor_fallback_when_groq_unavailable():
     req = CounselorRequest(message="What is the fee for FAST?")
     with patch("app.api.routes.counselor.GROQ_API_KEY", ""):
         resp = chat(req)
-        assert "AI counselor is temporarily unavailable" in resp.response
-        assert "SYSTEM" in resp.badges
+        assert "PKR 280,000" in resp.response
+        assert resp.success is True
+        assert resp.conversation_id
+        assert resp.sources
+
+
+def test_search_returns_multiple_verified_programs_without_llm():
+    req = CounselorRequest(message="Which universities offer BS Computer Science?")
+    with patch("app.api.routes.counselor.GROQ_API_KEY", ""):
+        resp = chat(req)
+
+    assert resp.intent == "search"
+    assert len(resp.sources) > 1
+    assert resp.metadata["llm_available"] is False
+
+
+def test_follow_up_uses_conversation_context():
+    first = CounselorRequest(message="Tell me about FAST BSCS")
+    with patch("app.api.routes.counselor.GROQ_API_KEY", ""):
+        first_response = chat(first)
+        second_response = chat(CounselorRequest(message="What is its fee?", conversation_id=first_response.conversation_id))
+
+    assert second_response.intent == "fee"
+    assert "FAST National University" in second_response.response
+
+
+def test_empty_message_is_rejected():
+    with patch("app.api.routes.counselor.GROQ_API_KEY", ""):
+        try:
+            chat(CounselorRequest(message=""))
+        except (HTTPException, ValueError):
+            return
+    raise AssertionError("Empty message was accepted")
+
+
+def test_conversation_context_isolated_by_id():
+    with patch("app.api.routes.counselor.GROQ_API_KEY", ""):
+        first = chat(CounselorRequest(message="Tell me about FAST BSCS"))
+        isolated = chat(CounselorRequest(message="What is its fee?"))
+
+    assert first.conversation_id != isolated.conversation_id
+    assert "specify the university" in isolated.response.lower()

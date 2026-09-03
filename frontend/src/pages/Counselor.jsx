@@ -21,6 +21,7 @@ export default function Counselor() {
     },
   ])
   const [input, setInput] = useState('')
+  const [conversationId, setConversationId] = useState(null)
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -49,14 +50,17 @@ export default function Counselor() {
       const data = await api.chatWithCounselor(
         text,
         normalizeProfile(profile),
-        { recommendations: analysis?.recommendations || [] }
+        { recommendations: analysis?.recommendations || [] },
+        conversationId
       )
+      setConversationId(data.conversation_id || conversationId)
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
           text: data.response,
           badges: data.badges || ['AI INSIGHT'],
+          sources: data.sources || [],
         },
       ])
     } catch {
@@ -103,6 +107,11 @@ export default function Counselor() {
                   </div>
                 )}
                 <div className="counselor-text">{msg.text}</div>
+                {msg.sources?.length > 0 && (
+                  <div className="counselor-sources">
+                    Sources: {msg.sources.map((source) => source.university).filter(Boolean).join(', ')}
+                  </div>
+                )}
               </div>
             </div>
           ))}
