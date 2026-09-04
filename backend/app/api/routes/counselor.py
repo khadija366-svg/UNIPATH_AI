@@ -28,6 +28,10 @@ SYSTEM_PROMPT = (
     "For a single-fact or single-program question, a short, direct answer is correct even if you have more verified data available. "
     "Use ONLY the provided verified university information and calculated UniPath system results. "
     "Never invent: eligibility requirements, merit formulas, fees, deadlines, tests, programs, or admission probabilities. "
+    "This applies to NAMES as much as numbers: never name a specific test (e.g. a test name you were not explicitly given), exam, "
+    "university, or requirement that does not appear verbatim in the context below. If a status code like WRONG_TEST or "
+    "TEST_REQUIRED is given without an accompanying detail naming the actual accepted test, say the specific accepted test isn't "
+    "available in your current data rather than guessing or naming a plausible-sounding one. "
     "Never claim guaranteed admission. "
     "Never override deterministic eligibility or merit calculations. "
     "If information is missing, unknown, outdated, or unverified, say so clearly. "
@@ -116,6 +120,7 @@ def _extract_entities(message: str, programs: List[Dict[str, Any]]) -> Dict[str,
         "program": best_program if best_score > 0 else None,
         "tests": matched_tests,
         "university_ids": matched_uni_ids,
+        "program_names": matched_program_names,
     }
 
 
@@ -126,9 +131,14 @@ def _conversation_history(request: CounselorRequest) -> List[Dict[str, str]]:
     return (stored + supplied)[-MAX_HISTORY:]
 
 
+FOLLOWUP_PATTERN = re.compile(
+    r"\b(it|its|there|that|them|their|they|other|others|remaining|rest|those|else)\b|what about|and the"
+)
+
+
 def _resolve_message(message: str, history: List[Dict[str, str]]) -> str:
-    """Give pronoun-only follow-ups the recent user topic without sending all history."""
-    if re.search(r"\b(it|its|there|that|them|their|they)\b", message.lower()) and history:
+    """Give pronoun/follow-up-only messages the recent user topic without sending all history."""
+    if FOLLOWUP_PATTERN.search(message.lower()) and history:
         previous_user_messages = [item.get("content", item.get("text", "")) for item in history if item.get("role") == "user"]
         return " ".join(previous_user_messages[-2:] + [message])
     return message
@@ -136,14 +146,25 @@ def _resolve_message(message: str, history: List[Dict[str, str]]) -> str:
 
 def _relevant_programs(message: str, programs: List[Dict[str, Any]], entities: Dict[str, Any]) -> List[Dict[str, Any]]:
     selected = []
+    program_names = entities.get("program_names") or set()
+    uni_ids = entities.get("university_ids") or set()
+    normalized_message = _normalize(message)
     for program in programs:
-        if entities.get("university_ids") and program["university_id"] not in entities["university_ids"]:
+        if uni_ids and program["university_id"] not in uni_ids:
             continue
-        normalized_message = _normalize(message)
         program_tokens = _normalize(program.get("name", "")).split()
-        if entities.get("university_ids") or entities.get("program") is program or any(token in normalized_message for token in program_tokens if len(token) > 2):
+        matches_alias = program.get("normalized_name") in program_names
+        token_overlap = any(token in normalized_message for token in program_tokens if len(token) > 2)
+        if program_names:
+            # A specific program was named/aliased (e.g. "cs" -> computer_science): only
+            # include programs matching THAT alias, even if specific universities were also
+            # named. Otherwise "all programs at that university" crowds out other named
+            # universities once the result cap is applied.
+            if matches_alias or token_overlap:
+                selected.append(program)
+        elif uni_ids or entities.get("program") is program or token_overlap:
             selected.append(program)
-    return selected[:8]
+    return selected[:12]
 
 
 def _source_metadata(programs: List[Dict[str, Any]]) -> List[dict]:
@@ -231,7 +252,7 @@ def _format_program_data(program: Dict[str, Any]) -> str:
 def _format_student_result(result: Dict[str, Any]) -> str:
     lines = []
     lines.append(f"Eligibility status: {result.get('eligibility', {}).get('status', 'Unknown')}")
-    lines.append(f"Test status: {result.get('test_status', 'Unknown')}")
+    lines.append(f"Test status: {result.get('test_status', 'Unknown')} — {result.get('test_detail', 'no detail available')}")
     lines.append(f"Calculated merit: {result.get('merit') if result.get('merit') is not None else 'Not calculated'}")
     if result.get("merit_breakdown"):
         breakdowns = [f"{b['component']}: {b['value']} x {int(b['weight']*100)}% = {b['contribution']}" for b in result["merit_breakdown"]]
@@ -284,7 +305,17 @@ def _build_context(request: CounselorRequest, entities: Dict[str, Any]) -> str:
             profile_lines.append("Entry tests: none reported")
         sections.append("\n".join(profile_lines))
 
-    if program and intent not in {"search", "comparison", "recommendation"}:
+    relevant_uni_count = len({p.get("university_id") for p in relevant})
+    if relevant and (relevant_uni_count > 1 or intent in {"search", "comparison", "recommendation"}):
+        # More than one university matched (or the student explicitly asked to search/
+        # compare/recommend) -- always send the FULL matched set. Never collapse a
+        # multi-university question down to a single best-guess program.
+        sections.append(
+            f"VERIFIED PROGRAM DATA ({len(relevant)} program(s) across {relevant_uni_count} "
+            f"universit{'y' if relevant_uni_count == 1 else 'ies'}):"
+        )
+        sections.extend(_format_program_data(item) for item in relevant)
+    elif program:
         sections.append("VERIFIED PROGRAM DATA:\n" + _format_program_data(program))
         result = _find_student_result(program, recommendations)
         if result:
@@ -300,7 +331,7 @@ def _build_context(request: CounselorRequest, entities: Dict[str, Any]) -> str:
                 f"(Match: {rec.get('match_score', '—')}%, "
                 f"Eligibility: {rec.get('eligibility', {}).get('status', '—')}, "
                 f"Merit: {rec.get('merit', '—')}%, "
-                f"Test: {rec.get('test_status', '—')})"
+                f"Test: {rec.get('test_status', '—')} — {rec.get('test_detail', 'no detail available')})"
             )
     else:
         sections.append("No verified student results available. Complete your profile to generate recommendations.")
@@ -318,21 +349,27 @@ def _is_injection_attempt(message: str) -> bool:
 
 def _detect_intent(message: str) -> str:
     m = message.lower()
-    if "merit" in m:
+
+    def has(*words: str) -> bool:
+        # Word-boundary match -- "fee" must not match inside "fees"/"coffee",
+        # "test" must not match inside "attest", etc.
+        return any(re.search(rf"\b{re.escape(w)}\b", m) for w in words)
+
+    if has("merit"):
         return "merit"
-    if "fee" in m or "cost" in m or "tuition" in m:
+    if has("fee", "fees", "cost", "costs", "tuition"):
         return "fee"
-    if "test" in m or "ecat" in m or "nat" in m or "entry test" in m:
+    if has("test", "tests", "ecat", "nat", "entry test"):
         return "test"
-    if "deadline" in m or "last date" in m or "closing" in m:
+    if has("deadline", "deadlines", "last date", "closing"):
         return "deadline"
-    if "eligible" in m or "can i get" in m or "can i apply" in m:
+    if has("eligible", "eligibility", "can i get", "can i apply"):
         return "eligibility"
-    if "compare" in m:
+    if has("compare", "comparison", "vs", "versus"):
         return "comparison"
-    if "recommend" in m or "best" in m or "top" in m:
+    if has("recommend", "recommendation", "best", "top"):
         return "recommendation"
-    if "which universities" in m or "what universities" in m or "what programs" in m or "offer" in m:
+    if "which universities" in m or "what universities" in m or "what programs" in m or has("offer", "offers"):
         return "search"
     return "general"
 

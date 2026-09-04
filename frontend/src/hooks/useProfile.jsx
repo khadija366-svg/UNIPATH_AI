@@ -76,8 +76,20 @@ export function ProfileProvider({ children }) {
     setAnalysisState(data)
     if (data) {
       localStorage.setItem(STORAGE_KEY_ANALYSIS, JSON.stringify(data))
+      // Compare selections must never outlive the run that produced them. Prune any
+      // selection whose program_id isn't in this analysis's recommendations -- this is
+      // what clears out a previous run's (e.g. CS) universities when a new profile/program
+      // (e.g. BBA) is analyzed, so "Add to Compare" isn't silently blocked by stale picks.
+      const validIds = new Set((data.recommendations || []).map((r) => r.program_id))
+      setCompareSelectionsState((prev) => {
+        const next = prev.filter((s) => validIds.has(s.program_id))
+        localStorage.setItem(STORAGE_KEY_COMPARE, JSON.stringify(next))
+        return next
+      })
     } else {
       localStorage.removeItem(STORAGE_KEY_ANALYSIS)
+      setCompareSelectionsState([])
+      localStorage.removeItem(STORAGE_KEY_COMPARE)
     }
   }
 
