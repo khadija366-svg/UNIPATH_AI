@@ -1,0 +1,8 @@
+[project]
+name = "unipath-ai"
+version = "0.1.0"
+description = "UniPath AI FastAPI backend"
+requires-python = ">=3.11"
+
+[tool.fastapi]
+entrypoint = "app.main:app"
