@@ -84,6 +84,9 @@ PROGRAM_ALIASES: Dict[str, str] = {
 }
 
 
+from app.core.deadlines import evaluate_deadline
+
+
 def load_universities() -> List[Dict[str, Any]]:
     with open(DATA_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -96,6 +99,9 @@ def load_universities() -> List[Dict[str, Any]]:
         for program in uni.get("programs", []):
             program.setdefault("source", source)
             program.setdefault("data_confidence", confidence)
+            dl_res = evaluate_deadline(program)
+            program["deadline_status"] = dl_res["status"]
+            program["days_remaining"] = dl_res["days_remaining"]
     return universities
 
 

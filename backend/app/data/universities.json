@@ -25,12 +25,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ITU Test", "SAT", "USAT"],
+            "accepted_tests": [
+              "ITU Test",
+              "SAT",
+              "USAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -66,12 +76,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ITU Test", "SAT", "USAT"],
+            "accepted_tests": [
+              "ITU Test",
+              "SAT",
+              "USAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -107,12 +127,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ITU Test", "SAT", "USAT"],
+            "accepted_tests": [
+              "ITU Test",
+              "SAT",
+              "USAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -148,12 +178,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ITU Test", "SAT", "USAT"],
+            "accepted_tests": [
+              "ITU Test",
+              "SAT",
+              "USAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -189,12 +229,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ITU Test", "SAT", "USAT"],
+            "accepted_tests": [
+              "ITU Test",
+              "SAT",
+              "USAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -246,12 +296,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -267,7 +326,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -287,12 +346,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -308,7 +376,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -328,12 +396,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -349,7 +426,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -369,12 +446,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -390,7 +476,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -410,12 +496,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -431,7 +526,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -451,12 +546,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "FSc Pre-Medical",
+              "ICS",
+              "A-Level",
+              "FA",
+              "Diploma"
+            ],
             "required_subjects": []
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["FAST-NU Test", "NAT"],
+            "accepted_tests": [
+              "FAST-NU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -472,7 +577,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-30",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://www.nu.edu.pk/admissions/eligibilitycriteria",
             "type": "official",
@@ -508,12 +613,20 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT"],
+            "accepted_tests": [
+              "ECAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -529,7 +642,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -549,12 +662,20 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT"],
+            "accepted_tests": [
+              "ECAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -570,7 +691,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -590,12 +711,20 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT"],
+            "accepted_tests": [
+              "ECAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -611,7 +740,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -631,12 +760,20 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT"],
+            "accepted_tests": [
+              "ECAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -652,7 +789,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -672,12 +809,20 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT"],
+            "accepted_tests": [
+              "ECAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -693,7 +838,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -713,12 +858,22 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "FSc Pre-Medical",
+              "ICS",
+              "A-Level",
+              "FA",
+              "Diploma"
+            ],
             "required_subjects": []
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["ECAT", "NAT"],
+            "accepted_tests": [
+              "ECAT",
+              "NAT"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -734,7 +889,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-09-05",
-          "deadline_status": "OPEN",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.uet.edu.pk",
             "type": "official",
@@ -770,12 +925,21 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["PU Test", "NAT"],
+            "accepted_tests": [
+              "PU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -811,12 +975,21 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["PU Test", "NAT"],
+            "accepted_tests": [
+              "PU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -852,12 +1025,21 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["PU Test", "NAT"],
+            "accepted_tests": [
+              "PU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -893,12 +1075,21 @@
           "eligibility": {
             "minimum_matric": 50,
             "minimum_intermediate": 50,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["PU Test", "NAT"],
+            "accepted_tests": [
+              "PU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -934,12 +1125,22 @@
           "eligibility": {
             "minimum_matric": 45,
             "minimum_intermediate": 45,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "FSc Pre-Medical",
+              "ICS",
+              "A-Level",
+              "FA",
+              "Diploma"
+            ],
             "required_subjects": []
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["PU Test", "NAT"],
+            "accepted_tests": [
+              "PU Test",
+              "NAT"
+            ],
             "minimum_score": 50
           },
           "merit_formula": {
@@ -991,12 +1192,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "ICS", "A-Level"],
-            "required_subjects": ["Mathematics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "ICS",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["SAT", "LUMS Test"],
+            "accepted_tests": [
+              "SAT",
+              "LUMS Test"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -1012,7 +1222,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-28",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://lums.edu.pk/programmes",
             "type": "official",
@@ -1032,12 +1242,21 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "A-Level"],
-            "required_subjects": ["Mathematics", "Physics"]
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "A-Level"
+            ],
+            "required_subjects": [
+              "Mathematics",
+              "Physics"
+            ]
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["SAT", "LUMS Test"],
+            "accepted_tests": [
+              "SAT",
+              "LUMS Test"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -1053,7 +1272,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-28",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.lums.edu.pk/undergraduate-programmes",
             "type": "official",
@@ -1073,12 +1292,22 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "FSc Pre-Medical",
+              "ICS",
+              "A-Level",
+              "FA",
+              "Diploma"
+            ],
             "required_subjects": []
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["SAT", "LUMS Test"],
+            "accepted_tests": [
+              "SAT",
+              "LUMS Test"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -1094,7 +1323,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-28",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.lums.edu.pk/undergraduate-programmes",
             "type": "official",
@@ -1114,12 +1343,22 @@
           "eligibility": {
             "minimum_matric": 60,
             "minimum_intermediate": 60,
-            "accepted_groups": ["FSc Pre-Engineering", "FSc Pre-Medical", "ICS", "A-Level", "FA", "Diploma"],
+            "accepted_groups": [
+              "FSc Pre-Engineering",
+              "FSc Pre-Medical",
+              "ICS",
+              "A-Level",
+              "FA",
+              "Diploma"
+            ],
             "required_subjects": []
           },
           "tests": {
             "required": true,
-            "accepted_tests": ["SAT", "LUMS Test"],
+            "accepted_tests": [
+              "SAT",
+              "LUMS Test"
+            ],
             "minimum_score": null
           },
           "merit_formula": {
@@ -1135,7 +1374,7 @@
             "currency": "PKR"
           },
           "deadline": "2026-08-28",
-          "deadline_status": "CLOSING_SOON",
+          "deadline_status": "CLOSED",
           "source": {
             "url": "https://admission.lums.edu.pk/undergraduate-programmes",
             "type": "official",

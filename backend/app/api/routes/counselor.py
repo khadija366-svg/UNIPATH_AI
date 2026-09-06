@@ -450,6 +450,18 @@ def _deterministic_answer(intent: str, message: str, programs: List[Dict[str, An
     if intent == "eligibility":
         return "\n\n".join(f"{p['name']} at {p['university_name']}: {_format_program_data(p).split('Eligibility: ', 1)[-1].splitlines()[0]}" for p in programs)
     return "\n\n".join(f"{p['name']} at {p['university_name']}" for p in programs)
+
+
+def _clean_markdown(text: str) -> str:
+    if not text:
+        return ""
+    cleaned = re.sub(r"\\(#{1,6})", r"\1", text)
+    cleaned = re.sub(r"\\\*", "*", cleaned)
+    cleaned = re.sub(r"\\---", "---", cleaned)
+    cleaned = re.sub(r"\\([+\-_\[\]\(\)])", r"\1", cleaned)
+    return cleaned
+
+
 @router.post("/counselor/chat")
 def chat(request: CounselorRequest):
     message = request.message or ""
@@ -487,14 +499,15 @@ def chat(request: CounselorRequest):
     sources = _source_metadata(source_programs)
     recommendations = _get_recommendations(request)
     if answer is not None:
-        final_answer = answer.strip() or _deterministic_answer(intent, message, source_programs, recommendations)
+        raw_final = answer.strip() or _deterministic_answer(intent, message, source_programs, recommendations)
+        final_answer = _clean_markdown(raw_final)
         badge = "AI INSIGHT" if answer.strip() else "FACT"
         _CONVERSATIONS.setdefault(conversation_id, []).extend([
             {"role": "user", "content": message}, {"role": "assistant", "content": final_answer}
         ])
         return CounselorResponse(response=final_answer, badges=[badge], intent=intent, conversation_id=conversation_id, sources=sources, metadata={"model": GROQ_MODEL, "data_source": "verified_project_data"})
 
-    fallback = _deterministic_answer(intent, message, source_programs, recommendations)
+    fallback = _clean_markdown(_deterministic_answer(intent, message, source_programs, recommendations))
     _CONVERSATIONS.setdefault(conversation_id, []).extend([
         {"role": "user", "content": message}, {"role": "assistant", "content": fallback}
     ])

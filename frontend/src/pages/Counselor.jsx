@@ -1,8 +1,27 @@
 import { useState, useRef, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { useProfile } from '../hooks/useProfile'
 import { api } from '../services/api'
 import { Loading } from '../components/ui/Loading'
 import { Badge } from '../components/ui/Badge'
+
+function cleanMarkdown(text) {
+  if (!text) return ''
+  return text
+    // Fix escaped markdown headings (\### -> ###)
+    .replace(/\\(#{1,6})/g, '$1')
+    // Fix escaped bold/italic (\*\* -> **, \* -> *)
+    .replace(/\\\*/g, '*')
+    // Fix escaped horizontal rules (\--- -> ---)
+    .replace(/\\---/g, '---')
+    // Fix escaped list items (\- -> -, \+ -> +)
+    .replace(/\\([+-])/g, '$1')
+    // Fix escaped brackets and parens
+    .replace(/\\([[\]()])/g, '$1')
+    // Fix escaped underscores (\_ -> _)
+    .replace(/\\_/g, '_')
+}
 
 const suggestions = [
   'Which universities offer BSCS under my budget?',
@@ -106,12 +125,27 @@ export default function Counselor() {
                     ))}
                   </div>
                 )}
-                <div className="counselor-text">{msg.text}</div>
-                {msg.sources?.length > 0 && (
-                  <div className="counselor-sources">
-                    Sources: {msg.sources.map((source) => source.university).filter(Boolean).join(', ')}
-                  </div>
-                )}
+                <div className="counselor-text counselor-markdown">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {cleanMarkdown(msg.text)}
+                  </ReactMarkdown>
+                </div>
+                {msg.sources?.length > 0 && (() => {
+                  const uniqueUniversities = Array.from(
+                    new Set(msg.sources.map((source) => source.university).filter(Boolean))
+                  )
+                  if (uniqueUniversities.length === 0) return null
+                  return (
+                    <div className="counselor-sources">
+                      <div className="counselor-sources-header">Sources:</div>
+                      <ul className="counselor-sources-list">
+                        {uniqueUniversities.map((uni) => (
+                          <li key={uni} className="counselor-source-item">{uni}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           ))}
@@ -190,7 +224,7 @@ export default function Counselor() {
           flex-shrink: 0;
         }
         .counselor-bubble {
-          max-width: 70%;
+          max-width: 75%;
           background: var(--surface-soft);
           border-radius: var(--radius-lg);
           padding: var(--space-md);
@@ -208,7 +242,118 @@ export default function Counselor() {
         .counselor-text {
           font-size: var(--text-sm);
           line-height: 1.6;
-          white-space: pre-wrap;
+        }
+        .counselor-markdown p {
+          margin: 0 0 var(--space-sm) 0;
+        }
+        .counselor-markdown p:last-child {
+          margin-bottom: 0;
+        }
+        .counselor-markdown h1,
+        .counselor-markdown h2,
+        .counselor-markdown h3,
+        .counselor-markdown h4 {
+          margin: var(--space-md) 0 var(--space-xs) 0;
+          font-weight: 700;
+          color: inherit;
+          line-height: 1.3;
+        }
+        .counselor-markdown h1:first-child,
+        .counselor-markdown h2:first-child,
+        .counselor-markdown h3:first-child,
+        .counselor-markdown h4:first-child {
+          margin-top: 0;
+        }
+        .counselor-markdown h1 { font-size: 1.15rem; }
+        .counselor-markdown h2 { font-size: 1.05rem; }
+        .counselor-markdown h3 { font-size: 0.95rem; }
+        .counselor-markdown h4 { font-size: 0.88rem; }
+        .counselor-markdown ul,
+        .counselor-markdown ol {
+          margin: 0 0 var(--space-sm) 0;
+          padding-left: var(--space-lg);
+        }
+        .counselor-markdown li {
+          margin-bottom: 4px;
+        }
+        .counselor-markdown li:last-child {
+          margin-bottom: 0;
+        }
+        .counselor-markdown strong {
+          font-weight: 700;
+        }
+        .counselor-markdown hr {
+          border: none;
+          border-top: 1px solid var(--border);
+          margin: var(--space-md) 0;
+        }
+        .counselor-markdown table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: var(--space-md) 0;
+          font-size: var(--text-xs);
+          display: block;
+          overflow-x: auto;
+        }
+        .counselor-markdown th,
+        .counselor-markdown td {
+          padding: 8px 10px;
+          border: 1px solid var(--border);
+          text-align: left;
+        }
+        .counselor-markdown th {
+          background: rgba(0, 0, 0, 0.05);
+          font-weight: 700;
+        }
+        .counselor-markdown code {
+          background: rgba(0, 0, 0, 0.06);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 0.85em;
+          font-family: monospace;
+        }
+        .counselor-message.user .counselor-markdown code {
+          background: rgba(255, 255, 255, 0.2);
+        }
+        .counselor-message.user .counselor-markdown th {
+          background: rgba(255, 255, 255, 0.15);
+        }
+        .counselor-message.user .counselor-markdown th,
+        .counselor-message.user .counselor-markdown td {
+          border-color: rgba(255, 255, 255, 0.25);
+        }
+        .counselor-message.user .counselor-markdown hr {
+          border-color: rgba(255, 255, 255, 0.25);
+        }
+        .counselor-sources {
+          margin-top: var(--space-md);
+          padding-top: var(--space-sm);
+          border-top: 1px dashed var(--border);
+          font-size: var(--text-xs);
+          color: var(--text-secondary);
+        }
+        .counselor-sources-header {
+          font-weight: 700;
+          margin-bottom: var(--space-xs);
+          color: var(--text-primary);
+        }
+        .counselor-sources-list {
+          list-style: disc;
+          padding-left: var(--space-md);
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .counselor-source-item {
+          font-size: var(--text-xs);
+        }
+        .counselor-message.user .counselor-sources {
+          color: rgba(255, 255, 255, 0.9);
+          border-top-color: rgba(255, 255, 255, 0.25);
+        }
+        .counselor-message.user .counselor-sources-header {
+          color: white;
         }
         .counselor-suggestions {
           display: flex;
